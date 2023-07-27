@@ -6,6 +6,8 @@ import { Endpoint } from '@/server/api/endpoint-base.js';
 import { UserEntityService } from '@/core/entities/UserEntityService.js';
 import { DI } from '@/di-symbols.js';
 import { sqlLikeEscape } from '@/misc/sql-like-escape.js';
+import { RoleService } from '@/core/RoleService.js';
+import { ApiError } from '../../error.js';
 
 export const meta = {
 	tags: ['users'],
@@ -21,6 +23,14 @@ export const meta = {
 			type: 'object',
 			optional: false, nullable: false,
 			ref: 'User',
+		},
+	},
+
+	errors: {
+		unavailable: {
+			message: 'Search of users unavailable.',
+			code: 'UNAVAILABLE',
+			id: 'c16c40c0-a05e-4cc4-8d1e-332ab272cb69',
 		},
 	},
 } as const;
@@ -48,8 +58,14 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		private userProfilesRepository: UserProfilesRepository,
 
 		private userEntityService: UserEntityService,
+		private roleService: RoleService,
 	) {
 		super(meta, paramDef, async (ps, me) => {
+			const serverPolicies = await this.roleService.getUserPolicies(null);
+			if (serverPolicies.simpleMode) {
+				throw new ApiError(meta.errors.unavailable);
+			}
+
 			const activeThreshold = new Date(Date.now() - (1000 * 60 * 60 * 24 * 30)); // 30日
 
 			const isUsername = ps.query.startsWith('@');

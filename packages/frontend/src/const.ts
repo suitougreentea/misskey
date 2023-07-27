@@ -71,6 +71,7 @@ export const ROLE_POLICIES = [
 	'userListLimit',
 	'userEachUserListsLimit',
 	'rateLimitFactor',
+	'simpleMode',
 ] as const;
 
 // なんか動かない

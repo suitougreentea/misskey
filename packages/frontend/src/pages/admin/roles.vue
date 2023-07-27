@@ -148,6 +148,14 @@
 							</MkSwitch>
 						</MkFolder>
 
+						<MkFolder v-if="matchQuery([i18n.ts._role._options.simpleMode, 'simpleMode'])">
+							<template #label>{{ i18n.ts._role._options.simpleMode }}</template>
+							<template #suffix>{{ policies.simpleMode ? i18n.ts.yes : i18n.ts.no }}</template>
+							<MkSwitch v-model="policies.simpleMode">
+								<template #label>{{ i18n.ts.enable }}</template>
+							</MkSwitch>
+						</MkFolder>
+
 						<MkButton primary rounded @click="updateBaseRole">{{ i18n.ts.save }}</MkButton>
 					</div>
 				</MkFolder>

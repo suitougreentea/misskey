@@ -12,7 +12,13 @@
 	</MkSpacer>
 
 	<MkSpacer v-else-if="tab === 'user'" :contentMax="800">
-		<XUser/>
+		<div v-if="usersSearchAvailable">
+			<XUser/>
+		</div>
+		<div v-else>
+			<!-- TODO: localize -->
+			<MkInfo warn>User search is unavailable.</MkInfo>
+		</div>
 	</MkSpacer>
 </MkStickyContainer>
 </template>
@@ -32,6 +38,7 @@ const XUser = defineAsyncComponent(() => import('./search.user.vue'));
 let tab = $ref('note');
 
 const notesSearchAvailable = (($i == null && instance.policies.canSearchNotes) || ($i != null && $i.policies.canSearchNotes));
+const usersSearchAvailable = !instance.policies.simpleMode;
 
 const headerActions = $computed(() => []);
 
