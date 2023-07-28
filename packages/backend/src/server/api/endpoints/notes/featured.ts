@@ -4,6 +4,8 @@ import { Endpoint } from '@/server/api/endpoint-base.js';
 import { QueryService } from '@/core/QueryService.js';
 import { NoteEntityService } from '@/core/entities/NoteEntityService.js';
 import { DI } from '@/di-symbols.js';
+import { RoleService } from '@/core/RoleService.js';
+import { ApiError } from '../../error.js';
 
 export const meta = {
 	tags: ['notes'],
@@ -19,6 +21,14 @@ export const meta = {
 			type: 'object',
 			optional: false, nullable: false,
 			ref: 'Note',
+		},
+	},
+
+	errors: {
+		unavailable: {
+			message: 'Search of featured notes unavailable.',
+			code: 'UNAVAILABLE',
+			id: '87518bb2-1cae-4b6d-b3d1-66b22e9f7b87',
 		},
 	},
 } as const;
@@ -42,8 +52,14 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 		private noteEntityService: NoteEntityService,
 		private queryService: QueryService,
+		private roleService: RoleService,
 	) {
 		super(meta, paramDef, async (ps, me) => {
+			const serverPolicies = await this.roleService.getUserPolicies(null);
+			if (serverPolicies.simpleMode) {
+				throw new ApiError(meta.errors.unavailable);
+			}
+
 			const day = 1000 * 60 * 60 * 24 * 3; // 3日前まで
 
 			const query = this.notesRepository.createQueryBuilder('note')

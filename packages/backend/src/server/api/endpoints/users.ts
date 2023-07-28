@@ -4,6 +4,8 @@ import { Endpoint } from '@/server/api/endpoint-base.js';
 import { QueryService } from '@/core/QueryService.js';
 import { UserEntityService } from '@/core/entities/UserEntityService.js';
 import { DI } from '@/di-symbols.js';
+import { RoleService } from '@/core/RoleService.js';
+import { ApiError } from '../error.js';
 
 export const meta = {
 	tags: ['users'],
@@ -17,6 +19,14 @@ export const meta = {
 			type: 'object',
 			optional: false, nullable: false,
 			ref: 'UserDetailed',
+		},
+	},
+
+	errors: {
+		unavailable: {
+			message: 'List of users unavailable.',
+			code: 'UNAVAILABLE',
+			id: '5e8009b9-b91f-47bc-97af-52794e1cf318',
 		},
 	},
 } as const;
@@ -48,8 +58,14 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 		private userEntityService: UserEntityService,
 		private queryService: QueryService,
+		private roleService: RoleService,
 	) {
 		super(meta, paramDef, async (ps, me) => {
+			const serverPolicies = await this.roleService.getUserPolicies(null);
+			if (serverPolicies.simpleMode) {
+				throw new ApiError(meta.errors.unavailable);
+			}
+
 			const query = this.usersRepository.createQueryBuilder('user')
 				.where('user.isExplorable = TRUE')
 				.andWhere('user.isSuspended = FALSE');

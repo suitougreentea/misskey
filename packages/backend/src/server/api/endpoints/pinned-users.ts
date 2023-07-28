@@ -7,6 +7,8 @@ import { Endpoint } from '@/server/api/endpoint-base.js';
 import { MetaService } from '@/core/MetaService.js';
 import { UserEntityService } from '@/core/entities/UserEntityService.js';
 import { DI } from '@/di-symbols.js';
+import { RoleService } from '@/core/RoleService.js';
+import { ApiError } from '../error.js';
 
 export const meta = {
 	tags: ['users'],
@@ -20,6 +22,14 @@ export const meta = {
 			type: 'object',
 			optional: false, nullable: false,
 			ref: 'UserDetailed',
+		},
+	},
+
+	errors: {
+		unavailable: {
+			message: 'List of pinned users unavailable.',
+			code: 'UNAVAILABLE',
+			id: 'a2618aef-bfae-4725-9d18-d5d0e6dd9fae',
 		},
 	},
 } as const;
@@ -39,11 +49,17 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 		private metaService: MetaService,
 		private userEntityService: UserEntityService,
+		private roleService: RoleService,
 	) {
 		super(meta, paramDef, async (ps, me) => {
-			const meta = await this.metaService.fetch();
+			const serverPolicies = await this.roleService.getUserPolicies(null);
+			if (serverPolicies.simpleMode) {
+				throw new ApiError(meta.errors.unavailable);
+			}
 
-			const users = await Promise.all(meta.pinnedUsers.map(acct => Acct.parse(acct)).map(acct => this.usersRepository.findOneBy({
+			const meta_ = await this.metaService.fetch();
+
+			const users = await Promise.all(meta_.pinnedUsers.map(acct => Acct.parse(acct)).map(acct => this.usersRepository.findOneBy({
 				usernameLower: acct.username.toLowerCase(),
 				host: acct.host ?? IsNull(),
 			})));

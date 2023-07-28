@@ -6,6 +6,8 @@ import type { ChannelsRepository } from '@/models/index.js';
 import { ChannelEntityService } from '@/core/entities/ChannelEntityService.js';
 import { DI } from '@/di-symbols.js';
 import { sqlLikeEscape } from '@/misc/sql-like-escape.js';
+import { RoleService } from '@/core/RoleService.js';
+import { ApiError } from '../../error.js';
 
 export const meta = {
 	tags: ['channels'],
@@ -19,6 +21,14 @@ export const meta = {
 			type: 'object',
 			optional: false, nullable: false,
 			ref: 'Channel',
+		},
+	},
+
+	errors: {
+		unavailable: {
+			message: 'Search of featured notes unavailable.',
+			code: 'UNAVAILABLE',
+			id: '86056148-586d-4d86-8ca8-627e6a1f5687',
 		},
 	},
 } as const;
@@ -44,8 +54,14 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 		private channelEntityService: ChannelEntityService,
 		private queryService: QueryService,
+		private roleService: RoleService,
 	) {
 		super(meta, paramDef, async (ps, me) => {
+			const serverPolicies = await this.roleService.getUserPolicies(null);
+			if (serverPolicies.simpleMode) {
+				throw new ApiError(meta.errors.unavailable);
+			}
+
 			const query = this.queryService.makePaginationQuery(this.channelsRepository.createQueryBuilder('channel'), ps.sinceId, ps.untilId)
 				.andWhere('channel.isArchived = FALSE');
 
