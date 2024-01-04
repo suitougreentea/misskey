@@ -1715,7 +1715,6 @@ export interface Locale {
             "canSearchNotes": string;
             "canUseTranslator": string;
             "avatarDecorationLimit": string;
-						"simpleMode": string;
         };
         "_condition": {
             "isLocal": string;
