@@ -80,9 +80,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			if (isUsername) {
 				const usernameQuery = this.usersRepository.createQueryBuilder('user')
 					.where('user.usernameLower LIKE :username', { username: sqlLikeEscape(ps.query.replace('@', '').toLowerCase()) + '%' })
-					.andWhere(new Brackets(qb => { qb
-						.where('user.updatedAt IS NULL')
-						.orWhere('user.updatedAt > :activeThreshold', { activeThreshold: activeThreshold });
+					.andWhere(new Brackets(qb => {
+						qb
+							.where('user.updatedAt IS NULL')
+							.orWhere('user.updatedAt > :activeThreshold', { activeThreshold: activeThreshold });
 					}))
 					.andWhere('user.isSuspended = FALSE');
 
@@ -107,9 +108,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 							qb.orWhere('user.usernameLower LIKE :username', { username: '%' + sqlLikeEscape(ps.query.toLowerCase()) + '%' });
 						}
 					}))
-					.andWhere(new Brackets(qb => { qb
-						.where('user.updatedAt IS NULL')
-						.orWhere('user.updatedAt > :activeThreshold', { activeThreshold: activeThreshold });
+					.andWhere(new Brackets(qb => {
+						qb
+							.where('user.updatedAt IS NULL')
+							.orWhere('user.updatedAt > :activeThreshold', { activeThreshold: activeThreshold });
 					}))
 					.andWhere('user.isSuspended = FALSE');
 
@@ -138,9 +140,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 					const query = this.usersRepository.createQueryBuilder('user')
 						.where(`user.id IN (${ profQuery.getQuery() })`)
-						.andWhere(new Brackets(qb => { qb
-							.where('user.updatedAt IS NULL')
-							.orWhere('user.updatedAt > :activeThreshold', { activeThreshold: activeThreshold });
+						.andWhere(new Brackets(qb => {
+							qb
+								.where('user.updatedAt IS NULL')
+								.orWhere('user.updatedAt > :activeThreshold', { activeThreshold: activeThreshold });
 						}))
 						.andWhere('user.isSuspended = FALSE')
 						.setParameters(profQuery.getParameters());

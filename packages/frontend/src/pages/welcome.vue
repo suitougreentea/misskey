@@ -12,26 +12,27 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
-import { instance } from '@/instance';
+import { computed, ref } from 'vue';
+import * as Misskey from 'misskey-js';
 import XSetup from './welcome.setup.vue';
 import XEntranceA from './welcome.entrance.a.vue';
 import XEntranceB from './welcome.entrance.b.vue';
+import { instance } from '@/instance.js';
 import { instanceName } from '@/config.js';
 import * as os from '@/os.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
 
-let meta = $ref(null);
+const meta = ref<Misskey.entities.MetaResponse | null>(null);
 
 os.api('meta', { detail: true }).then(res => {
-	meta = res;
+	meta.value = res;
 });
 
-const headerActions = $computed(() => []);
+const headerActions = computed(() => []);
 
-const headerTabs = $computed(() => []);
+const headerTabs = computed(() => []);
 
-const alternativeEntrance = $ref(instance.policies?.simpleMode);
+const alternativeEntrance = ref(instance.policies?.simpleMode);
 
 definePageMetadata(computed(() => ({
 	title: instanceName,
