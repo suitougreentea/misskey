@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import { } from 'vue';
+import { ref } from 'vue';
 import { Instance } from 'misskey-js/built/entities';
 import XSigninDialog from '@/components/MkSigninDialog.vue';
 import XSignupDialog from '@/components/MkSignupDialog.vue';
@@ -23,10 +23,10 @@ import { i18n } from '@/i18n';
 import { instance } from '@/instance';
 import { instanceName } from '@/config';
 
-let meta = $ref<Instance>();
+let meta = ref<Instance>();
 
 os.api('meta', { detail: true }).then(_meta => {
-	meta = _meta;
+	meta.value = _meta;
 });
 
 function signin() {

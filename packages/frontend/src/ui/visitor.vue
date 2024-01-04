@@ -126,8 +126,8 @@ const keymap = computed(() => {
 
 const root = computed(() => mainRouter.currentRoute.value.name === 'index');
 
-const isVisitorDashboardAvailable = $ref(!instance.policies?.simpleMode);
-const isDetailedVisitorMenuAvailable = $ref(!instance.policies?.simpleMode);
+const isVisitorDashboardAvailable = ref(!instance.policies?.simpleMode);
+const isDetailedVisitorMenuAvailable = ref(!instance.policies?.simpleMode);
 
 os.api('meta', { detail: true }).then(res => {
 	meta.value = res;
