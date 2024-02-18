@@ -28,7 +28,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</button>
 			</div>
 		</div>
-		<div v-else-if="!root" class="header">
+		<div v-else-if="!isRoot" class="header">
 			<div class="wide">
 				<MkA to="/" class="link" activeClass="active"><i class="ti ti-home icon"></i> {{ i18n.ts.home }}</MkA>
 			</div>

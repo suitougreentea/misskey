@@ -14,18 +14,19 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { Instance } from 'misskey-js/built/entities';
+import * as Misskey from 'misskey-js';
 import XSigninDialog from '@/components/MkSigninDialog.vue';
 import XSignupDialog from '@/components/MkSignupDialog.vue';
 import MkButton from '@/components/MkButton.vue';
-import * as os from '@/os';
-import { i18n } from '@/i18n';
-import { instance } from '@/instance';
-import { instanceName } from '@/config';
+import * as os from '@/os.js';
+import { misskeyApi } from '@/scripts/misskey-api.js';
+import { i18n } from '@/i18n.js';
+import { instance } from '@/instance.js';
+import { instanceName } from '@/config.js';
 
-let meta = ref<Instance>();
+const meta = ref<Misskey.entities.MetaResponse | null>(null);
 
-os.api('meta', { detail: true }).then(_meta => {
+misskeyApi('meta', { detail: true }).then(_meta => {
 	meta.value = _meta;
 });
 
