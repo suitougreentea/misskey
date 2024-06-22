@@ -4,8 +4,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<div v-if="meta">
-	<XSetup v-if="meta.requireSetup"/>
+<div v-if="instance">
+	<XSetup v-if="instance.requireSetup"/>
 	<XEntranceB v-else-if="alternativeEntrance"/>
 	<XEntranceA v-else/>
 </div>
@@ -17,22 +17,21 @@ import * as Misskey from 'misskey-js';
 import XSetup from './welcome.setup.vue';
 import XEntranceA from './welcome.entrance.a.vue';
 import XEntranceB from './welcome.entrance.b.vue';
-import { instance } from '@/instance.js';
 import { instanceName } from '@/config.js';
-import { misskeyApi } from '@/scripts/misskey-api.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
+import { fetchInstance } from '@/instance.js';
 
-const meta = ref<Misskey.entities.MetaResponse | null>(null);
+const instance = ref<Misskey.entities.MetaDetailed | null>(null);
 
-misskeyApi('meta', { detail: true }).then(res => {
-	meta.value = res;
+fetchInstance(true).then((res) => {
+	instance.value = res;
 });
 
 const headerActions = computed(() => []);
 
 const headerTabs = computed(() => []);
 
-const alternativeEntrance = ref(instance.policies?.simpleMode);
+const alternativeEntrance = ref(instance.value.policies?.simpleMode);
 
 definePageMetadata(() => ({
 	title: instanceName,
