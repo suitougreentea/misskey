@@ -31,7 +31,7 @@ const headerActions = computed(() => []);
 
 const headerTabs = computed(() => []);
 
-const alternativeEntrance = ref(instance.value.policies?.simpleMode);
+const alternativeEntrance = computed(() => instance.value?.policies.simpleMode ?? false);
 
 definePageMetadata(() => ({
 	title: instanceName,
