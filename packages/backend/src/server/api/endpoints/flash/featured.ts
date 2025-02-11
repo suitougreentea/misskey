@@ -10,6 +10,7 @@ import { FlashEntityService } from '@/core/entities/FlashEntityService.js';
 import { DI } from '@/di-symbols.js';
 import { RoleService } from '@/core/RoleService.js';
 import { ApiError } from '../../error.js';
+import { FlashService } from '@/core/FlashService.js';
 
 export const meta = {
 	tags: ['flash'],
@@ -37,16 +38,17 @@ export const meta = {
 
 export const paramDef = {
 	type: 'object',
-	properties: {},
+	properties: {
+		offset: { type: 'integer', minimum: 0, default: 0 },
+		limit: { type: 'integer', minimum: 1, maximum: 100, default: 10 },
+	},
 	required: [],
 } as const;
 
 @Injectable()
 export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-disable-line import/no-default-export
 	constructor(
-		@Inject(DI.flashsRepository)
-		private flashsRepository: FlashsRepository,
-
+		private flashService: FlashService,
 		private flashEntityService: FlashEntityService,
 		private roleService: RoleService,
 	) {
@@ -56,13 +58,11 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				throw new ApiError(meta.errors.unavailable);
 			}
 
-			const query = this.flashsRepository.createQueryBuilder('flash')
-				.andWhere('flash.likedCount > 0')
-				.orderBy('flash.likedCount', 'DESC');
-
-			const flashs = await query.limit(10).getMany();
-
-			return await this.flashEntityService.packMany(flashs, me);
+			const result = await this.flashService.featured({
+				offset: ps.offset,
+				limit: ps.limit,
+			});
+			return await this.flashEntityService.packMany(result, me);
 		});
 	}
 }
