@@ -29,7 +29,7 @@ export const meta = {
 
 	errors: {
 		unavailable: {
-			message: 'Search of featured gallery unavailable.',
+			message: 'Featured gallery posts unavailable.',
 			code: 'UNAVAILABLE',
 			id: '8da529fa-3eda-45d0-9ad3-35db1b0ded58',
 		},

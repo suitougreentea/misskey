@@ -28,7 +28,7 @@ export const meta = {
 
 	errors: {
 		unavailable: {
-			message: 'Search of featured pages unavailable.',
+			message: 'Featured pages unavailable.',
 			code: 'UNAVAILABLE',
 			id: 'c8c17928-08a9-4bcb-aa5a-ae8701fa6672',
 		},

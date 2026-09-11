@@ -28,7 +28,7 @@ export const meta = {
 
 	errors: {
 		unavailable: {
-			message: 'Search of featured channels unavailable.',
+			message: 'Featured channels unavailable.',
 			code: 'UNAVAILABLE',
 			id: '6864efb4-b254-4403-a341-a8993cb0c019',
 		},

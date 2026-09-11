@@ -130,8 +130,8 @@ const keymap = computed(() => {
 	};
 });
 
-const isVisitorDashboardAvailable = ref(!instance.policies?.simpleMode);
-const isDetailedVisitorMenuAvailable = ref(!instance.policies?.simpleMode);
+const isVisitorDashboardAvailable = computed(() => !instance.policies?.simpleMode);
+const isDetailedVisitorMenuAvailable = computed(() => !instance.policies?.simpleMode);
 
 function signin() {
 	const { dispose } = os.popup(XSigninDialog, {

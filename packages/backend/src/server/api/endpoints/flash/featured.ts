@@ -29,7 +29,7 @@ export const meta = {
 
 	errors: {
 		unavailable: {
-			message: 'Search of featured flashes unavailable.',
+			message: 'Featured flashes unavailable.',
 			code: 'UNAVAILABLE',
 			id: '1a590c75-91ed-4e18-8765-8fecde49be85',
 		},

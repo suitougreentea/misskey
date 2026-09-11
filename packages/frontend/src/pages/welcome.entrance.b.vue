@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: syuilo and misskey-project
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+
 <template>
 <div v-if="meta" :class="$style.root">
 	<img :src="instance.iconUrl || instance.faviconUrl || '/favicon.ico'" alt="" :class="$style.mainIcon"/>
@@ -65,12 +70,6 @@ function signup() {
 	margin: 0;
 	padding: 16px 32px 24px 32px;
 	font-size: 1.4em;
-}
-
-.mainLogo {
-	vertical-align: bottom;
-	max-height: 120px;
-	max-width: min(100%, 300px);
 }
 
 .mainAbout {

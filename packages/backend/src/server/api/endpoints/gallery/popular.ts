@@ -28,9 +28,9 @@ export const meta = {
 
 	errors: {
 		unavailable: {
-			message: 'Search of popular gallery unavailable.',
+			message: 'Popular gallery posts unavailable.',
 			code: 'UNAVAILABLE',
-			id: '8da529fa-3eda-45d0-9ad3-35db1b0ded58',
+			id: 'ca69d3fe-6fef-4d88-8151-e3474d63b868',
 		},
 	},
 } as const;

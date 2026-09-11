@@ -27,7 +27,7 @@ export const meta = {
 
 	errors: {
 		unavailable: {
-			message: 'Search of gallery posts unavailable.',
+			message: 'Gallery posts unavailable.',
 			code: 'UNAVAILABLE',
 			id: '0bdc3f09-ef14-4134-87ae-e43bec6da688',
 		},

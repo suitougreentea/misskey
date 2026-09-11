@@ -33,7 +33,7 @@ export const meta = {
 
 	errors: {
 		unavailable: {
-			message: 'Search of featured notes unavailable.',
+			message: 'Featured notes unavailable.',
 			code: 'UNAVAILABLE',
 			id: '87518bb2-1cae-4b6d-b3d1-66b22e9f7b87',
 		},
