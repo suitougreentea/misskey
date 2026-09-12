@@ -8293,6 +8293,10 @@ export interface Locale extends ILocale {
              * ウォーターマーク機能の使用可否
              */
             "watermarkAvailable": string;
+            /**
+             * シンプルモード
+             */
+            "simpleMode": string;
         };
         "_condition": {
             /**
