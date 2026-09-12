@@ -7,18 +7,20 @@ SPDX-License-Identifier: AGPL-3.0-only
 <div v-if="instance">
 	<XSetup v-if="instance.requireSetup"/>
 	<XEntranceB v-else-if="alternativeEntrance"/>
-	<XEntranceA v-else/>
+	<XEntranceClassic v-else-if="(instance.clientOptions.entrancePageStyle ?? 'classic') === 'classic'"/>
+	<XEntranceSimple v-else/>
 </div>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import * as Misskey from 'misskey-js';
-import XSetup from './welcome.setup.vue';
-import XEntranceA from './welcome.entrance.a.vue';
-import XEntranceB from './welcome.entrance.b.vue';
 import { instanceName } from '@@/js/config.js';
-import { definePageMetadata } from '@/scripts/page-metadata.js';
+import XSetup from './welcome.setup.vue';
+import XEntranceB from './welcome.entrance.b.vue';
+import XEntranceClassic from './welcome.entrance.classic.vue';
+import XEntranceSimple from './welcome.entrance.simple.vue';
+import { definePage } from '@/page.js';
 import { fetchInstance } from '@/instance.js';
 
 const instance = ref<Misskey.entities.MetaDetailed | null>(null);
@@ -33,7 +35,7 @@ const headerTabs = computed(() => []);
 
 const alternativeEntrance = computed(() => instance.value?.policies.simpleMode ?? false);
 
-definePageMetadata(() => ({
+definePage(() => ({
 	title: instanceName,
 	icon: null,
 }));
